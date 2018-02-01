@@ -31,10 +31,11 @@
 //  ERROR
 .err{
   position: relative;
-  font-size: 1em;
-  width: 80%;
-  padding: 10px;
-  background: red;
-  margin:auto;
+  font-size: 1.3em;
+  padding: 50px 0;
+  background: #282C34;
+  border: 7px ridge rgb(131, 12, 12);
+  color: #61DAFB;
+  margin: auto;
   z-index: 3;
 }

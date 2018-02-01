@@ -1,16 +1,6 @@
 <template>
   <div id="app">
-    <!-- Menu -->
-    <nav class="nav">
-      <ul class="nav__ul">
-        <li class="nav__li">
-          <router-link class="nav__href" exact to="/" active-class="active">Главная</router-link>
-        </li>
-        <li class="nav__li">
-          <router-link class="nav__href" to="/fivedays" active-class="active">Погода на 5 дней.</router-link>
-        </li>
-      </ul>
-    </nav>
+   
     <!-- Main content -->
     <router-view/>
   </div>
@@ -70,29 +60,5 @@ table{
       padding: 0.5em;
     }
    }
-}
-/* menu*/
-.nav{
-  position: relative;
-  display: flex;
-  z-index: 2;
-  width: 100%;
-  height: 70px;
-  background: #282C34;
-}
-.nav__ul{
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-.nav__li{
-  flex: 1;
-  a{
-    color: #61DAFB;
-    line-height: 50px;
-  }
-}
-.active{
-  border-top: 5px solid red;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
 	<main class="main">
+		<app-nav></app-nav>
 		<img :src=this.imgSrc alt="bg" class="main__bg">
 		<section class="content" v-if="!err">
 			<h1>Погода в вашем городе</h1>
@@ -8,7 +9,7 @@
 					<!-- ДАТА и Город -->
 					<tr>
 						<td>{{date}}</td>
-						<td><h2>{{this.country}} {{this.data.name}}</h2></td>
+						<td><h2>{{this.country}} {{this.city}}</h2></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -37,7 +38,11 @@
 				</tbody>
 			</table>
 		</section>
-		<section class="err" v-else>{{errorMsg.cod}} {{errorMsg.message}}</section>
+		<!-- Error AXIOS section -->
+		<section class="err" v-else>
+						{{errorMsg.cod}} {{errorMsg.message}} <br>
+						{{errorMsg}}
+		</section>
 	</main>
 	
 </template>
@@ -45,9 +50,13 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+const appNav = () => import('../Navigation');
 
 export default {
 	name: 'MainPage',
+	components: {
+		appNav
+	},
   data () {
     return {
 			data: '',
@@ -64,7 +73,8 @@ export default {
 			imgSrc: '',
 			temp: '',
 			err: false,
-			errorMsg: ''
+			errorMsg: '',
+			city: '',
     }
 	},
 	computed: {
@@ -73,37 +83,56 @@ export default {
 		}
 	},
   methods: {
-		// Дынные с https://openweathermap.org/
+		// Дынные с https://openweathermap.org/ Geolocation function
     getData () {
 			if ("geolocation" in navigator) {
-				 navigator.geolocation.getCurrentPosition((pos) => {
-				 this.latitude = pos.coords.latitude;
-				 this.longitude = Math.floor(pos.coords.longitude);
-				//  
-					axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&appid=${this.apiKey}&units=metric&lang=ru`)
-						.then((res) => {
-									const resD = res.data;
-									this.data = resD;
-									this.icon = resD.weather[0].icon;
-									this.description = resD.weather[0].description;
-									this.dateNow =  resD.dt;
-									this.main = resD.main;
-									this.temp = Math.floor(resD.main.temp);
-									this.country = resD.sys.country;
-									this.windSpeed = resD.wind.speed
-									console.log(this.icon);
-									// Смена фона при изменении погоды
-									this.bgChange(this.icon);
-						})
-						.catch((error) => {
-							console.log(error);
-							this.err = true;
-							this.errorMsg = error.response.data;
-						});
-			 });
+				 navigator.geolocation.getCurrentPosition(this.reqAxios, this.errGeoloc, {timeout: 60000});
 			} else {
 				alert("Геолокация не доступна");
 			};
+		},
+		// Axios req Запрос на сервер
+		reqAxios(pos) {
+			this.latitude = pos.coords.latitude;
+			this.longitude = Math.floor(pos.coords.longitude);
+				//  
+			axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&appid=${this.apiKey}&units=metric&lang=ru`)
+				.then((res) => {
+							const resD = res.data;
+							this.data = resD;
+							this.icon = resD.weather[0].icon;
+							this.description = resD.weather[0].description;
+							this.dateNow =  resD.dt;
+							this.main = resD.main;
+							this.temp = Math.floor(resD.main.temp);
+							this.country = resD.sys.country;
+							this.windSpeed = resD.wind.speed
+							this.city = resD.name;
+							// console.log(this.icon);
+							// Смена фона при изменении погоды
+							this.bgChange(this.icon);
+				})
+				.catch((error) => {
+					console.log(error);
+					this.err = true;
+					this.errorMsg = error.response.data;
+				});
+		},
+		// Error Axios Geolocation fanction
+		errGeoloc(err) {
+			if (err.code == 1) {
+				this.err = true;
+				this.errorMsg = "Включите геолокацию";
+			} else if (err.code == 2) {
+				this.err = true;
+				this.errorMsg = "Сеть не работает или нет связи со спутником";
+			}	else if (err.code == 3) {
+				this.err = true;
+				this.errorMsg = "ОЙ! Чёт сервер тупит.Или программист пьяный код писал...Подождите чуток.";
+			} else {
+				this.err = false;
+				this.errorMsg = "";
+			}
 		},
 		//Функция Смены фона при изменении погоды
 		bgChange (icon) {
@@ -128,6 +157,7 @@ export default {
 	},
   created () {
 		this.getData();
+		// this.reqAxios(pos);
 		this.bgChange();
   }
 }

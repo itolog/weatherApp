@@ -1,7 +1,8 @@
+@import '../../assets/mixins/mixins';
+
 .main{
   display: flex;
   flex-flow: column;
-  background: grey;
   height: 100%;
   h1{
     position: relative;
@@ -16,6 +17,8 @@
 }
 .img{
   position: fixed;
+  width: 100vw;
+  height: 100vh;
   z-index: 1;
   top: 0;
   left: 0;
@@ -30,6 +33,9 @@
   align-self: center;
   width: 80%;
   height: 60px;
+  @include tablets {
+    width: 100%;
+  }
 }
 .tabs__ul{
   display: flex;
@@ -61,6 +67,9 @@
   h2{
     background: rebeccapurple;
   }
+  @include tablets {
+    width: 100%;
+  }
 }
 // TABLE
 .info-wether__table{
@@ -70,4 +79,5 @@
 }
 .active{
   background: red;
+  color: black;
 }

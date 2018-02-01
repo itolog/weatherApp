@@ -1,8 +1,10 @@
 <template>
   <main class="main">
     <img class="img" src="https://cdn.getyourguide.com/niwziy2l9cvz/4WPfYLxDxeACwuO2qc2mM0/3ff5c2c4a752f316ba07b1db903d8f71/Gdansk-1112x630_7_.jpg" alt="gd">
+    <!-- NAV -->
+    <app-nav></app-nav>
     <!-- TI%LE -->
-    <h1>{{this.data.city['name']}}</h1>
+    <h1>{{this.city}}</h1>
     <!-- TABS -->
     <div class="tabs">
       <ul class="tabs__ul">
@@ -79,7 +81,12 @@
 <script>
   import axios from 'axios';
   import moment from 'moment';
+  const appNav = () => import('../Navigation');
+
 export default {
+  components: {
+    appNav
+  },
   data () {
     return {
       data: '',
@@ -89,6 +96,7 @@ export default {
       list: [],
       carrentTab: '0',
       currentDate: '',
+      city: '',
       // массвы дней
       allDays: [],
       day0: [],
@@ -110,6 +118,7 @@ export default {
           const data =  res.data;
           this.data = data;
           this.list = data.list;
+          this.city = data.city.name;
 //////////////////////////////////////////////////////////////
           const mySet = new Set();
           let arr = [];
@@ -118,8 +127,9 @@ export default {
             mySet.add(val.dt_txt.slice(0, 10));
           });
           arr = [...mySet];
+          arr.length = 5;
           this.allDays = arr;
-          console.log(this.data);
+          // console.log(this.data);
   /** 
   *  Каждый день добавляем в отдедный массив.
   *  временый полу-кастыль.Надо динамически подтягивать дни.
@@ -144,6 +154,8 @@ export default {
         })
     },
     chengeTab(e) {
+      console.log(e);
+      e.style.border = '1px solid red';
       this.currentDate = e.innerText;
       this.carrentTab = e.dataset.role;
     }
