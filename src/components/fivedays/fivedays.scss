@@ -47,6 +47,7 @@
     border: 1px solid black;
     color: aqua;
     cursor: pointer;
+    border: 1px solid rebeccapurple;
     &:hover{
       // color: grey;
       transform: scale(0.94);
@@ -81,3 +82,28 @@
   background: red;
   color: black;
 }
+.bounce-enter-active {
+  animation: slideInUp .5s;
+}
+.bounce-leave-active {
+  animation: slideInUp .5s reverse;
+}
+.slideInUp {
+  -webkit-animation-name: slideInUp;
+  animation-name: slideInUp;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  }
+  @-webkit-keyframes slideInUp {
+  0% {
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+    visibility: visible;
+    }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    }
+  }

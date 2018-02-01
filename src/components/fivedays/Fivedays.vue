@@ -20,60 +20,63 @@
     <section class="info-wether">
       <h2>{{this.currentDate}}</h2>
       <!-- 1 day -->
-      <table class="info-wether__table" v-if="this.carrentTab == 0">
-        <tr v-for="(val, key) in this.day0" :key="key">
-          <td>{{val.dt_txt.slice(-8, -3)}}</td>
-          <td>{{val.weather[0].description}}</td>
-          <td>
-            <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
-          </td>
-          <td>{{Math.floor(val.main.temp)}}&#176;</td>
-        </tr>
-      </table>
+      <transition name="bounce" mode="out-in">
+        <table class="info-wether__table" v-if="this.carrentTab == 0" key="one">
+          <tr v-for="(val, key) in this.day0" :key="key">
+            <td>{{val.dt_txt.slice(-8, -3)}}</td>
+            <td>{{val.weather[0].description}}</td>
+            <td>
+              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+            </td>
+            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+          </tr>
+        </table>
        <!-- 2 day -->
-      <table class="info-wether__table" v-else-if="this.carrentTab == 1">
-        <tr v-for="(val, key) in this.day1" :key="key">
-          <td>{{val.dt_txt.slice(-8, -3)}}</td>
-          <td>{{val.weather[0].description}}</td>
-          <td>
-            <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
-          </td>
-          <td>{{Math.floor(val.main.temp)}}&#176;</td>
-        </tr>
-      </table>
-      <!-- 3  days-->
-      <table class="info-wether__table" v-else-if="this.carrentTab == 2">
-        <tr v-for="(val, key) in this.day2" :key="key">
-          <td>{{val.dt_txt.slice(-8, -3)}}</td>
-          <td>{{val.weather[0].description}}</td>
-          <td>
-            <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
-          </td>
-          <td>{{Math.floor(val.main.temp)}}&#176;</td>
-        </tr>
-      </table>
-      <!-- 4 days -->
-      <table class="info-wether__table" v-else-if="this.carrentTab == 3">
-        <tr v-for="(val, key) in this.day3" :key="key">
-          <td>{{val.dt_txt.slice(-8, -3)}}</td>
-          <td>{{val.weather[0].description}}</td>
-          <td>
-            <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
-          </td>
-          <td>{{Math.floor(val.main.temp)}}&#176;</td>
-        </tr>
-      </table>
-      <!-- 5 days -->
-      <table class="info-wether__table" v-else-if="this.carrentTab == 4">
-        <tr v-for="(val, key) in this.day4" :key="key">
-          <td>{{val.dt_txt.slice(-8, -3)}}</td>
-          <td>{{val.weather[0].description}}</td>
-          <td>
-            <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
-          </td>
-          <td>{{Math.floor(val.main.temp)}}&#176;</td>
-        </tr>
-      </table>
+        <table class="info-wether__table" v-if="this.carrentTab == 1" key="two">
+          <tr v-for="(val, key) in this.day1" :key="key">
+            <td>{{val.dt_txt.slice(-8, -3)}}</td>
+            <td>{{val.weather[0].description}}</td>
+            <td>
+              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+            </td>
+            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+          </tr>
+        </table>
+        <!-- 3  days-->
+        <table class="info-wether__table" v-if="this.carrentTab == 2" key="three">
+          <tr v-for="(val, key) in this.day2" :key="key">
+            <td>{{val.dt_txt.slice(-8, -3)}}</td>
+            <td>{{val.weather[0].description}}</td>
+            <td>
+              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+            </td>
+            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+          </tr>
+        </table>
+        <!-- 4 days -->
+        <table class="info-wether__table" v-if="this.carrentTab == 3" key="four">
+          <tr v-for="(val, key) in this.day3" :key="key">
+            <td>{{val.dt_txt.slice(-8, -3)}}</td>
+            <td>{{val.weather[0].description}}</td>
+            <td>
+              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+            </td>
+            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+          </tr>
+        </table>
+        <!-- 5 days -->
+        <table class="info-wether__table" v-if="this.carrentTab == 4" key="five">
+          <tr v-for="(val, key) in this.day4" :key="key">
+            <td>{{val.dt_txt.slice(-8, -3)}}</td>
+            <td>{{val.weather[0].description}}</td>
+            <td>
+              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+            </td>
+            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+          </tr>
+        </table>
+      </transition>
+      
     </section>
   </main>
 </template>
@@ -154,8 +157,6 @@ export default {
         })
     },
     chengeTab(e) {
-      console.log(e);
-      e.style.border = '1px solid red';
       this.currentDate = e.innerText;
       this.carrentTab = e.dataset.role;
     }
