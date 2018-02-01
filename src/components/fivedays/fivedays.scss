@@ -1,0 +1,73 @@
+.main{
+  display: flex;
+  flex-flow: column;
+  background: grey;
+  height: 100%;
+  h1{
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    margin-top: 50px;
+    height: 70px;
+    width: 100%;
+    background: rebeccapurple;
+    color: whitesmoke;
+  }
+}
+.img{
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+// TABS
+.tabs{
+  display: flex;
+  z-index: 2;
+  // margin-top: 50px;
+  align-self: center;
+  width: 80%;
+  height: 60px;
+}
+.tabs__ul{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  li{
+    flex: 1;
+    background: #000;
+    border: 1px solid black;
+    color: aqua;
+    cursor: pointer;
+    &:hover{
+      // color: grey;
+      transform: scale(0.94);
+      border: 1px solid lightcoral;
+      transition: 800ms;
+    }
+  }
+}
+// INFO Weather
+.info-wether{
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  align-self: center;
+  z-index: 2;
+  width: 80%;
+  color: aqua;
+  h2{
+    background: rebeccapurple;
+  }
+}
+// TABLE
+.info-wether__table{
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 60px;
+}
+.active{
+  background: red;
+}

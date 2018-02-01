@@ -1,7 +1,7 @@
 .main{
   position: relative;
   min-width: 100%;
-  min-height: 100%;
+  height: 100vh;
 }
 .main__bg{
   position: absolute;
@@ -23,19 +23,18 @@
 }
 .table{
   width: 90%;
-  font-size: 1.3em;
-  table-layout: fixed;
   font-family: cursLuminari, fantasyive;
   background-color: rgba(0, 0, 0, 0.8);
   color: whitesmoke;
   border-radius: 5px;
-  tr{
-    display: flex;
-    flex-flow: wrap;
-    border-bottom: 1px solid grey;
-    td{
-      flex: 1;
-      padding: 0.5em;
-    }
-  }
+}
+//  ERROR
+.err{
+  position: relative;
+  font-size: 1em;
+  width: 80%;
+  padding: 10px;
+  background: red;
+  margin:auto;
+  z-index: 3;
 }
