@@ -5,6 +5,7 @@
     <app-nav></app-nav>
     <!-- TI%LE -->
     <h1>{{this.city}}</h1>
+    <span class="span-alert">"Отключите VPN для корректного отображения данных"</span>
     <!-- TABS -->
     <div class="tabs">
       <ul class="tabs__ul">
@@ -23,60 +24,59 @@
       <transition name="bounce" mode="out-in">
         <table class="info-wether__table" v-if="this.carrentTab == 0" key="one">
           <tr v-for="(val, key) in this.day0" :key="key">
-            <td>{{val.dt_txt.slice(-8, -3)}}</td>
-            <td>{{val.weather[0].description}}</td>
+            <td>{{val.datetime.slice(11)}}:00</td>
+            <td>{{val.weather.description}}</td>
             <td>
-              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+              <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+            <td>{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
        <!-- 2 day -->
         <table class="info-wether__table" v-if="this.carrentTab == 1" key="two">
           <tr v-for="(val, key) in this.day1" :key="key">
-            <td>{{val.dt_txt.slice(-8, -3)}}</td>
-            <td>{{val.weather[0].description}}</td>
+            <td>{{val.datetime.slice(11)}}:00</td>
+            <td>{{val.weather.description}}</td>
             <td>
-              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+              <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+            <td>{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
         <!-- 3  days-->
         <table class="info-wether__table" v-if="this.carrentTab == 2" key="three">
           <tr v-for="(val, key) in this.day2" :key="key">
-            <td>{{val.dt_txt.slice(-8, -3)}}</td>
-            <td>{{val.weather[0].description}}</td>
+            <td>{{val.datetime.slice(11)}}:00</td>
+            <td>{{val.weather.description}}</td>
             <td>
-              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+              <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+            <td>{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
         <!-- 4 days -->
         <table class="info-wether__table" v-if="this.carrentTab == 3" key="four">
           <tr v-for="(val, key) in this.day3" :key="key">
-            <td>{{val.dt_txt.slice(-8, -3)}}</td>
-            <td>{{val.weather[0].description}}</td>
+            <td>{{val.datetime.slice(11)}}:00</td>
+            <td>{{val.weather.description}}</td>
             <td>
-              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+              <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+            <td>{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
         <!-- 5 days -->
         <table class="info-wether__table" v-if="this.carrentTab == 4" key="five">
           <tr v-for="(val, key) in this.day4" :key="key">
-            <td>{{val.dt_txt.slice(-8, -3)}}</td>
-            <td>{{val.weather[0].description}}</td>
+            <td>{{val.datetime.slice(11)}}:00</td>
+            <td>{{val.weather.description}}</td>
             <td>
-              <img :src="`https://openweathermap.org/img/w/${val.weather[0].icon}.png`" alt="icon...">
+              <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.main.temp)}}&#176;</td>
+            <td>{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
       </transition>
-      
     </section>
   </main>
 </template>
@@ -93,7 +93,7 @@ export default {
   data () {
     return {
       data: '',
-      apiKey: '4546e7ef6204c8641d57614a1f45af9c',
+      apiKey: '7a6fc49e3e7a4a16a50ca3115f3e20d8',
 			latitude: '',
       longitude: '',
       list: [],
@@ -116,37 +116,37 @@ export default {
   },
   methods: {
     getData () {
-      axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=Zaporizhzhya&appid=${this.apiKey}&units=metric&lang=ru`)
+      axios.get(`https://api.weatherbit.io/v2.0/forecast/3hourly?&ip=auto&key=${this.apiKey}&lang=ru`)
         .then(res => {
           const data =  res.data;
           this.data = data;
-          this.list = data.list;
-          this.city = data.city.name;
+          this.list = data.data;
+          this.city = data.city_name;
 //////////////////////////////////////////////////////////////
           const mySet = new Set();
           let arr = [];
           // Выбираем все уникальные дни
           this.list.map((val) => {
-            mySet.add(val.dt_txt.slice(0, 10));
+            mySet.add(val.datetime.slice(0, 10));
           });
           arr = [...mySet];
+          // Ограничиваем до 5 дней в массиве
           arr.length = 5;
           this.allDays = arr;
-          // console.log(this.data);
   /** 
   *  Каждый день добавляем в отдедный массив.
   *  временый полу-кастыль.Надо динамически подтягивать дни.
   */
           for(let i of this.list) {
-            if(i.dt_txt.includes(arr[0])) {
+            if(i.datetime.includes(arr[0])) {
               this.day0.push(i);
-            } else if (i.dt_txt.includes(arr[1])) {
+            } else if (i.datetime.includes(arr[1])) {
               this.day1.push(i);
-            } else if (i.dt_txt.includes(arr[2])) {
+            } else if (i.datetime.includes(arr[2])) {
               this.day2.push(i);
-            }else if (i.dt_txt.includes(arr[3])) {
+            }else if (i.datetime.includes(arr[3])) {
               this.day3.push(i);
-            } else if (i.dt_txt.includes(arr[4])) {
+            } else if (i.datetime.includes(arr[4])) {
               this.day4.push(i);
             }
           }
@@ -157,7 +157,7 @@ export default {
         })
     },
     chengeTab(e) {
-      this.currentDate = e.innerText;
+      this.currentDate = moment(e.innerText).locale("ru").format("dddd");
       this.carrentTab = e.dataset.role;
     }
   },

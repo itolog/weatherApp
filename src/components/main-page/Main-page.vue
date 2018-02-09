@@ -1,22 +1,28 @@
 <template>
 	<main class="main">
 		<app-nav></app-nav>
-		<img :src=this.imgSrc alt="bg" class="main__bg">
+		<img :src='this.imgSrc' alt="bg" class="main__bg">
 		<section class="content" v-if="!err">
 			<h1>Погода в вашем городе</h1>
 			<table class="table">
 				<thead>
-					<!-- ДАТА и Город -->
-					<tr>
-						<td>{{date}}</td>
-						<td><h2>{{this.country}} {{this.city}}</h2></td>
-					</tr>
+					<td>{{date}}</td>
 				</thead>
 				<tbody>
+					<!--  и Город -->
+					<tr>
+						<td v-if="this.pod == 'd'">
+								<img class="pod__img" src="http://icons.iconarchive.com/icons/jaan-jaak/weather/256/cloudy-partly-icon.png" alt="day">
+						</td>
+						<td v-else>
+								<img class="pod__img" src="http://www.pf-arkhbum.ru/skin/img/icons/weather/night/02n.png" alt="night">
+						</td>
+						<td><h2>{{this.data.country_code}} {{this.data.city_name}}</h2></td>
+					</tr>
 					<!-- Описание погоды -->
 					<tr>
 						<td>
-							<img :src="`https://openweathermap.org/img/w/${this.icon}.png`" alt="icon">
+							<img :src="`https://www.weatherbit.io/static/img/icons/${this.icon}.png`" alt="icon">
 						</td>
 						<td>
 							<p>
@@ -26,14 +32,22 @@
 					</tr>
 					<!-- Температура -->
 					<tr>
-						<td>Температура</td>
-						<td>{{this.temp}} &#176;</td>
-						<td>макс: {{this.main.temp_max}} &#176;<br>мин: {{this.main.temp_min}} &#176;</td>
-						<!-- <td></td> -->
+						<th>Температура:</th>
+						<td>{{Math.floor(this.data.temp)}} &#176;</td>
 					</tr>
 					<!-- Скорость ветра -->
 					<tr>
-						<td>Скорость ветра: {{this.windSpeed}} м/с</td>
+						<th>Ветер:  </th>
+						<td>{{this.data.wind_cdir_full}} <br>{{this.data.wind_spd}} м/с</td>
+					</tr>
+					<!-- Восход заход солнца -->
+					<!-- <tr>
+						<td>Рассвет: {{this.data.sunrise}}</td>
+						<td>Закат: {{this.data.sunset}}</td>
+					</tr> -->
+					<!-- Относительная влажность -->
+					<tr>
+						<td>Относительная влажность: {{this.data.rh}}&#37;</td>
 					</tr>
 				</tbody>
 			</table>
@@ -42,16 +56,18 @@
 		<section class="err" v-else>
 						{{errorMsg.cod}} {{errorMsg.message}} <br>
 						{{errorMsg}}
+			<div class="geo-err" v-if="geoErr">
+				<img src="http://smartphonus.com/wp-content/uploads/2017/08/081417_0836_3.png" alt="geoErr" class="geo-err__img">
+				<img src="http://smartphonus.com/wp-content/uploads/2017/08/081417_0836_4.png" alt="geoErr" class="geo-err__img">
+			</div>
 		</section>
 	</main>
-	
 </template>
 
 <script>
 import axios from 'axios';
 import moment from 'moment';
 const appNav = () => import('../Navigation');
-
 export default {
 	name: 'MainPage',
 	components: {
@@ -59,34 +75,31 @@ export default {
 	},
   data () {
     return {
-			data: '',
-			apiKey: '4546e7ef6204c8641d57614a1f45af9c',
+			data: {},
+			apiKey: '7a6fc49e3e7a4a16a50ca3115f3e20d8',
 			latitude: '',
 			longitude: '',
-			country: '',
 			icon: '',
 			description: '',
+			pod: '',
 			dateNow: '',
 			currentTime: null,
-			main: '',
-			windSpeed: '',
 			imgSrc: '',
-			temp: '',
 			err: false,
 			errorMsg: '',
-			city: '',
+			geoErr: false
     }
 	},
 	computed: {
 		date () {
-			return moment().locale("ru").format('ddd: DD-MMM YYYY');
+			return moment().locale("ru").format('dddd: DD-MMM YYYY');
 		}
 	},
   methods: {
-		// Дынные с https://openweathermap.org/ Geolocation function
+		// Дынные с https://www.weatherbit.io Geolocation function
     getData () {
 			if ("geolocation" in navigator) {
-				 navigator.geolocation.getCurrentPosition(this.reqAxios, this.errGeoloc, {timeout: 60000});
+				 navigator.geolocation.getCurrentPosition(this.reqAxios, this.errGeoloc, {timeout: 30000, enableHighAccuracy: true});
 			} else {
 				alert("Геолокация не доступна");
 			};
@@ -94,23 +107,18 @@ export default {
 		// Axios req Запрос на сервер
 		reqAxios(pos) {
 			this.latitude = pos.coords.latitude;
-			this.longitude = Math.floor(pos.coords.longitude);
+			this.longitude = pos.coords.longitude;
 				//  
-			axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&appid=${this.apiKey}&units=metric&lang=ru`)
+			axios.get(`https://api.weatherbit.io/v2.0/current?&lat=${this.latitude}&lon=${this.longitude}&key=${this.apiKey}&lang=ru`)
 				.then((res) => {
-							const resD = res.data;
+							const resD = res.data.data[0];
+							const code = resD.weather.code;
 							this.data = resD;
-							this.icon = resD.weather[0].icon;
-							this.description = resD.weather[0].description;
-							this.dateNow =  resD.dt;
-							this.main = resD.main;
-							this.temp = Math.floor(resD.main.temp);
-							this.country = resD.sys.country;
-							this.windSpeed = resD.wind.speed
-							this.city = resD.name;
-							// console.log(this.icon);
+							this.icon = resD.weather.icon;
+							this.description = resD.weather.description;
+							this.pod = resD.pod;
 							// Смена фона при изменении погоды
-							this.bgChange(this.icon);
+							this.bgChange(code);
 				})
 				.catch((error) => {
 					console.log(error);
@@ -128,29 +136,35 @@ export default {
 				this.errorMsg = "Сеть не работает или нет связи со спутником";
 			}	else if (err.code == 3) {
 				this.err = true;
-				this.errorMsg = "ОЙ! Чёт сервер тупит.Или программист пьяный код писал...Подождите чуток.";
+				this.geoErr = true;
+				this.errorMsg = 'Хороший программист,Неее Очень...Возможно вам поможет эта инструкция';
 			} else {
 				this.err = false;
 				this.errorMsg = "";
 			}
 		},
 		//Функция Смены фона при изменении погоды
-		bgChange (icon) {
-			switch (this.icon) {
-				case '01n':
-					this.imgSrc = 'http://sympathink.com/wp-content/uploads/night-photography-tips-ideas.jpg';
+		bgChange (code) {
+			switch (code) {
+				case '200':case '201':case '202':case '230':case '231':case '232':case '233':case '300':case '301':case '302':
+						case '500': case '501': case '502': case '511': case '520': case '521': case '522':
+						// Дождь
+					this.imgSrc = 'https://i.ytimg.com/vi/ap8xVjt5smA/maxresdefault.jpg';
 						break;
-				case '01d':
-						this.imgSrc = 'https://www.ihdimages.com/wp-content/uploadsktz/2014/11/nature_sunshine_background_wallpaper.jpg';
+				case '600': case '602': case '603': case '610': case '611': case '612': case '621': case '622': case '623':
+				// Снегь
+						this.imgSrc = 'http://media.nyckelpiganjenny.se/2015/12/star-winter.jpg';
 						break;
-				case '13d' || '13n':
-						this.imgSrc = 'https://smart-lab.ru/uploads/images/04/69/24/2017/03/28/0099a7339a.jpg';
+				case '700': case '711': case '721': case '731': case '741': case '751':
+				// Туман
+						this.imgSrc = 'https://i.ytimg.com/vi/L_FZy2iFRZM/maxresdefault.jpg';
 						break;
-				case '50n':
-						this.imgSrc = 'http://o-planete.ru/wp-content/uploads/2013/10/%D1%82%D1%83%D0%BC%D0%B0%D0%BD-.jpg';
+				case '800': case '801': case '802': case '803': case '804':
+				// Солнце
+						this.imgSrc = 'https://avatars.mds.yandex.net/get-pdb/27625/7eee2880-7d86-481b-91b5-d49d59ce807e/s800';
 						break;
 				default: 
-						this.imgSrc = 'https://abc10up.com/wp-content/uploads/2016/12/WEATHER-755x437.jpg';
+						this.imgSrc = 'http://www.gvirt.com/uploads/posts/2014-04/1396979891_photo1572242-from-lostpic.net-with-love.jpg';
 						break;
 			}
 		}
@@ -159,7 +173,7 @@ export default {
 		this.getData();
 		// this.reqAxios(pos);
 		this.bgChange();
-  }
+	}
 }
 </script>
 

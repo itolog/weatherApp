@@ -31,7 +31,7 @@ html, body{
     // height: 100%;
 }
 h1,h2,h3{
-  color: #eff1f3;
+  color: #cfd9e4;
   margin: 0;
 }
 ul{
@@ -55,9 +55,9 @@ table{
     display: flex;
     flex-flow: wrap;
     border-bottom: 1px solid grey;
-    td{
+    td, th{
       flex: 1;
-      padding: 0.5em;
+      padding: 0.4em;
     }
    }
 }
