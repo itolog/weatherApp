@@ -61,3 +61,34 @@
 .geo-err__img{
   width: 100%;
 }
+/// animation ICON
+@keyframes icon{
+  0% {
+    // transform: translateX(-2em);
+    opacity: 1;
+    transform: scale(1)
+  }
+  25%{
+    transform: translateX(-2em);
+  }
+  50% {
+   transform: translateX(2em);
+   opacity: 0.3;
+   transform: scale(0.9)
+  }
+  75%{
+    transform: translateX(2em);
+  }
+  100%{
+    transform: translateX();
+    opacity: 1;
+    transform: scale(1)
+  }
+}
+.icon{
+  animation-name: icon; 
+ animation-iteration-count: infinite;
+ animation-duration: 3s;
+ animation-timing-function: linear;
+ overflow:hidden;
+}

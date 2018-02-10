@@ -12,17 +12,17 @@
 					<!--  и Город -->
 					<tr>
 						<td v-if="this.pod == 'd'">
-								<img class="pod__img" src="http://icons.iconarchive.com/icons/jaan-jaak/weather/256/cloudy-partly-icon.png" alt="day">
+								<img title="День" class="pod__img" src="http://icons.iconarchive.com/icons/jaan-jaak/weather/256/cloudy-partly-icon.png" alt="day">
 						</td>
 						<td v-else>
-								<img class="pod__img" src="http://www.pf-arkhbum.ru/skin/img/icons/weather/night/02n.png" alt="night">
+								<img title="Ночь" class="pod__img" src="http://www.pf-arkhbum.ru/skin/img/icons/weather/night/02n.png" alt="night">
 						</td>
 						<td><h2>{{this.data.country_code}} {{this.data.city_name}}</h2></td>
 					</tr>
 					<!-- Описание погоды -->
 					<tr>
 						<td>
-							<img :src="`https://www.weatherbit.io/static/img/icons/${this.icon}.png`" alt="icon">
+							<img class="icon" :src="`https://www.weatherbit.io/static/img/icons/${this.icon}.png`" alt="icon">
 						</td>
 						<td>
 							<p>
