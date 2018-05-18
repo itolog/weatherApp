@@ -33,7 +33,7 @@
 					<!-- Температура -->
 					<tr>
 						<th>Температура:</th>
-						<td>{{Math.floor(this.data.temp)}} &#176;</td>
+						<td v-bind:style="styleObject">{{Math.floor(this.data.temp)}} &#176;</td>
 					</tr>
 					<!-- Скорость ветра -->
 					<tr>
@@ -82,9 +82,13 @@ export default {
 			icon: '',
 			description: '',
 			pod: '',
+			temperatura: null,
+			styleObject: {
+				color: 'orange'
+			},
 			dateNow: '',
 			currentTime: null,
-			imgSrc: '',
+			imgSrc: './../../assets/mist.jpg',
 			err: false,
 			errorMsg: '',
 			geoErr: false
@@ -97,19 +101,19 @@ export default {
 	},
   methods: {
 		// Дынные с https://www.weatherbit.io Geolocation function
-    getData () {
+    async getData () {
 			if ("geolocation" in navigator) {
-				 navigator.geolocation.getCurrentPosition(this.reqAxios, this.errGeoloc, {timeout: 30000, enableHighAccuracy: true});
+				await navigator.geolocation.getCurrentPosition(this.reqAxios, this.errGeoloc, {timeout: 30000, enableHighAccuracy: true});
 			} else {
 				alert("Геолокация не доступна");
 			};
 		},
 		// Axios req Запрос на сервер
-		reqAxios(pos) {
+		async reqAxios(pos) {
 			this.latitude = pos.coords.latitude;
 			this.longitude = pos.coords.longitude;
 				//  
-			axios.get(`https://api.weatherbit.io/v2.0/current?&lat=${this.latitude}&lon=${this.longitude}&key=${this.apiKey}&lang=ru`)
+			await	axios.get(`https://api.weatherbit.io/v2.0/current?&lat=${this.latitude}&lon=${this.longitude}&key=${this.apiKey}&lang=ru`)
 				.then((res) => {
 							const resD = res.data.data[0];
 							const code = resD.weather.code;
@@ -117,6 +121,8 @@ export default {
 							this.icon = resD.weather.icon;
 							this.description = resD.weather.description;
 							this.pod = resD.pod;
+							this.temperatura = resD.temp;
+							// console.log(this.temperatura);
 							// Смена фона при изменении погоды
 							this.bgChange(code);
 				})
@@ -125,6 +131,11 @@ export default {
 					this.err = true;
 					this.errorMsg = error.response.data;
 				});
+		},
+		changeColorTemp() {
+			if(this.temperatura <= 0) {
+				this.styleObject.color = 'aqua'
+			}
 		},
 		// Error Axios Geolocation fanction
 		errGeoloc(err) {
@@ -173,6 +184,7 @@ export default {
 		this.getData();
 		// this.reqAxios(pos);
 		this.bgChange();
+		this.changeColorTemp();
 	}
 }
 </script>

@@ -29,7 +29,7 @@
             <td>
               <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.temp)}}&#176;</td>
+            <td v-bind:class="{'worm': val.temp >= 0}">{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
        <!-- 2 day -->
@@ -40,7 +40,7 @@
             <td>
               <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.temp)}}&#176;</td>
+            <td v-bind:class="{'worm': val.temp >= 0}">{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
         <!-- 3  days-->
@@ -51,7 +51,7 @@
             <td>
               <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.temp)}}&#176;</td>
+            <td v-bind:class="{'worm': val.temp >= 0}">{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
         <!-- 4 days -->
@@ -62,7 +62,7 @@
             <td>
               <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.temp)}}&#176;</td>
+            <td v-bind:class="{'worm': val.temp >= 0}">{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
         <!-- 5 days -->
@@ -73,7 +73,7 @@
             <td>
               <img :src="`https://www.weatherbit.io/static/img/icons/${val.weather.icon}.png`" alt="icon...">
             </td>
-            <td>{{Math.floor(val.temp)}}&#176;</td>
+            <td v-bind:class="{'worm': val.temp >= 0}">{{Math.floor(val.temp)}}&#176;</td>
           </tr>
         </table>
       </transition>
@@ -115,8 +115,8 @@ export default {
     }
   },
   methods: {
-    getData () {
-      axios.get(`https://api.weatherbit.io/v2.0/forecast/3hourly?&ip=auto&key=${this.apiKey}&lang=ru`)
+    async getData () {
+      await axios.get(`https://api.weatherbit.io/v2.0/forecast/3hourly?&ip=auto&key=${this.apiKey}&lang=ru`)
         .then(res => {
           const data =  res.data;
           this.data = data;
