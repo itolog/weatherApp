@@ -4,53 +4,56 @@
 		<img :src='this.imgSrc' alt="bg" class="main__bg">
 		<section class="content" v-if="!err">
 			<h1>Погода в вашем городе</h1>
-			<table class="table">
-				<thead>
-					<td>{{date}}</td>
-				</thead>
-				<tbody>
-					<!--  и Город -->
-					<tr>
-						<td v-if="this.pod == 'd'">
-								<img title="День" class="pod__img" src="http://icons.iconarchive.com/icons/jaan-jaak/weather/256/cloudy-partly-icon.png" alt="day">
-						</td>
-						<td v-else>
-								<img title="Ночь" class="pod__img" src="http://www.pf-arkhbum.ru/skin/img/icons/weather/night/02n.png" alt="night">
-						</td>
-						<td><h2>{{this.data.country_code}} {{this.data.city_name}}</h2></td>
-					</tr>
-					<!-- Описание погоды -->
-					<tr>
-						<td>
-							<img class="icon" :src="`https://www.weatherbit.io/static/img/icons/${this.icon}.png`" alt="icon">
-						</td>
-						<td>
-							<p>
-								{{this.description}}
-							</p>
-						</td>
-					</tr>
-					<!-- Температура -->
-					<tr>
-						<th>Температура:</th>
-						<td v-bind:style="styleObject">{{Math.floor(this.data.temp)}} &#176;</td>
-					</tr>
-					<!-- Скорость ветра -->
-					<tr>
-						<th>Ветер:  </th>
-						<td>{{this.data.wind_cdir_full}} <br>{{this.data.wind_spd}} м/с</td>
-					</tr>
-					<!-- Восход заход солнца -->
-					<!-- <tr>
-						<td>Рассвет: {{this.data.sunrise}}</td>
-						<td>Закат: {{this.data.sunset}}</td>
-					</tr> -->
-					<!-- Относительная влажность -->
-					<tr>
-						<td>Относительная влажность: {{this.data.rh}}&#37;</td>
-					</tr>
-				</tbody>
-			</table>
+			  <transition name="bounce" mode="out-in">
+					<table class="table" v-if="this.load">
+						<thead>
+							<td>{{date}}</td>
+						</thead>
+						<tbody>
+							<!--  и Город -->
+							<tr>
+								<td v-if="this.pod == 'd'">
+										<img title="День" class="pod__img" src="http://icons.iconarchive.com/icons/jaan-jaak/weather/256/cloudy-partly-icon.png" alt="day">
+								</td>
+								<td v-else>
+										<img title="Ночь" class="pod__img" src="http://www.pf-arkhbum.ru/skin/img/icons/weather/night/02n.png" alt="night">
+								</td>
+								<td><h2>{{this.data.country_code}} {{this.data.city_name}}</h2></td>
+							</tr>
+							<!-- Описание погоды -->
+							<tr>
+								<td>
+									<img class="icon" :src="`https://www.weatherbit.io/static/img/icons/${this.icon}.png`" alt="icon">
+								</td>
+								<td>
+									<p>
+										{{this.description}}
+									</p>
+								</td>
+							</tr>
+							<!-- Температура -->
+							<tr>
+								<th>Температура:</th>
+								<td v-bind:style="styleObject">{{Math.floor(this.data.temp)}} &#176;</td>
+							</tr>
+							<!-- Скорость ветра -->
+							<tr>
+								<th>Ветер:  </th>
+								<td>{{this.data.wind_cdir_full}} <br>{{this.data.wind_spd}} м/с</td>
+							</tr>
+							<!-- Восход заход солнца -->
+							<!-- <tr>
+								<td>Рассвет: {{this.data.sunrise}}</td>
+								<td>Закат: {{this.data.sunset}}</td>
+							</tr> -->
+							<!-- Относительная влажность -->
+							<tr>
+								<td>Относительная влажность: {{this.data.rh}}&#37;</td>
+							</tr>
+						</tbody>
+					</table>
+			  </transition>
+			<div class="lds-ripple"  v-if="!this.load"><div></div><div></div></div>
 		</section>
 		<!-- Error AXIOS section -->
 		<section class="err" v-else>
@@ -91,7 +94,8 @@ export default {
 			imgSrc: './../../assets/mist.jpg',
 			err: false,
 			errorMsg: '',
-			geoErr: false
+			geoErr: false,
+			load: false
     }
 	},
 	computed: {
@@ -125,6 +129,7 @@ export default {
 							// console.log(this.temperatura);
 							// Смена фона при изменении погоды
 							this.bgChange(code);
+							this.load = true
 				})
 				.catch((error) => {
 					console.log(error);

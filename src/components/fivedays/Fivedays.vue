@@ -17,8 +17,12 @@
         >{{val}}</li>
       </ul>
     </div>
+    <div class="errGet"  v-if="this.errrorGet">
+      {{this.errrorGet}}
+      <p>{{this.errCont}}</p>
+    </div>
     <!-- Section info weather -->
-    <section class="info-wether">
+    <section class="info-wether" v-else>
       <h2>{{this.currentDate}}</h2>
       <!-- 1 day -->
       <transition name="bounce" mode="out-in">
@@ -107,6 +111,8 @@ export default {
       day2: [],
       day3: [],
       day4: [],
+      errrorGet: '',
+      errCont: ''
     }
   },
   computed: {
@@ -153,7 +159,13 @@ export default {
 ////////////////////////////////////////////////////////////
         })
         .catch(e => {
-          // this.errors.push(e)
+          this.errrorGet = e.message;
+          if(e.request.status) {
+             this.errCont = "Возможно поменялось API или НаДо уже перейти на платный тариф"
+          } else {
+            this.errCont = "Чё оно так?Нипанятна"
+          }
+         
         })
     },
     chengeTab(e) {
