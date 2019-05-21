@@ -1,21 +1,22 @@
-@import '../../assets/mixins/mixins';
+@import "../../assets/mixins/mixins";
 
-.main{
+.main {
   display: flex;
   flex-flow: column;
   height: 100%;
-  h1{
+  h1 {
     position: relative;
     z-index: 2;
     margin: 0;
-    margin-top: 50px;
-    height: 70px;
-    width: 100%;
+    padding: 1%;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 22px;
     background: rebeccapurple;
     color: whitesmoke;
   }
 }
-.img{
+.img {
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -25,42 +26,9 @@
   right: 0;
   bottom: 0;
 }
-// TABS
-.tabs{
-  display: flex;
-  z-index: 2;
-  // margin-top: 50px;
-  align-self: center;
-  width: 80%;
-  height: 60px;
-  @include tablets {
-    width: 100%;
-  }
-}
-.tabs__ul{
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-flow: wrap;
-  li{
-    flex: 1;
-    background: #000;
-    border: 1px solid black;
-    color: aqua;
-    cursor: pointer;
-    padding: 5px;
-    // border: 1px solid rebeccapurple;
-    font-size: 1em;
-    &:hover{
-      // color: grey;
-      transform: scale(0.94);
-      border: 1px double white;
-      transition: 800ms;
-    }
-  }
-}
+
 // INFO Weather
-.info-wether{
+.info-wether {
   position: relative;
   display: flex;
   flex-flow: column;
@@ -68,7 +36,7 @@
   z-index: 2;
   width: 80%;
   color: aqua;
-  h2{
+  h2 {
     background: rebeccapurple;
   }
   @include tablets {
@@ -76,67 +44,107 @@
   }
 }
 // TABLE
-.info-wether__table{
+.info-wether__table {
   width: 100%;
-  margin-bottom: 60px;
-  tr{
-    background-color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 20px;
+  tr {
+    background-color: rgba(0, 0, 0, 0.9);
   }
   @include tablets {
     width: 100%;
-    tr{
+    tr {
       display: flex;
       flex-flow: column;
-      margin-bottom: 10px;
+      // margin-bottom: 10px;
       border-radius: 10px;
       border: 2px solid rebeccapurple;
     }
   }
+  // }
+  // .bounce-enter-active {
+  //   animation: slideInUp 0.5s;
+  // }
+  // .bounce-leave-active {
+  //   animation: slideInUp 0.5s reverse;
+  // }
+  // .slideInUp {
+  //   -webkit-animation-name: slideInUp;
+  //   animation-name: slideInUp;
+  //   -webkit-animation-duration: 1s;
+  //   animation-duration: 1s;
+  //   -webkit-animation-fill-mode: both;
+  //   animation-fill-mode: both;
+  // }
+  // @-webkit-keyframes slideInUp {
+  //   0% {
+  //     -webkit-transform: translateY(100%);
+  //     transform: translateY(100%);
+  //     visibility: visible;
+  //   }
+  //   100% {
+  //     -webkit-transform: translateY(0);
+  //     transform: translateY(0);
+  //   }
 }
-.bounce-enter-active {
-  animation: slideInUp .5s;
+.span-alert {
+  position: relative;
+  z-index: 2;
+  background: #000;
+  color: grey;
+  padding-bottom: 5px;
 }
-.bounce-leave-active {
-  animation: slideInUp .5s reverse;
+
+.worm {
+  color: orange;
 }
-.slideInUp {
-  -webkit-animation-name: slideInUp;
-  animation-name: slideInUp;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  }
-  @-webkit-keyframes slideInUp {
+.errGet {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.9);
+  color: rgb(228, 25, 25);
+  z-index: 10;
+  min-height: 200px;
+}
+
+// LOADER
+.lds-facebook {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  z-index: 10;
+  margin: auto;
+}
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 6px;
+  width: 13px;
+  background: #fff;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
   0% {
-    -webkit-transform: translateY(100%);
-    transform: translateY(100%);
-    visibility: visible;
-    }
+    top: 6px;
+    height: 51px;
+  }
+  50%,
   100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    }
+    top: 19px;
+    height: 26px;
   }
-  .span-alert{
-    position: relative;
-    z-index: 2;
-    background: #000;
-    color: grey;
-    padding-bottom: 5px;
-  }
-
-
-  .worm{
-    color: orange;
-  }
-  .errGet{
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    font-weight: bold;
-    background: rgba(0, 0, 0, 0.9);
-    color: rgb(228, 25, 25);
-    z-index: 10;
-    min-height: 200px;
-  }
+}
